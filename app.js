@@ -15,31 +15,50 @@ new Vue({
       this.monsterHealth = 100
     },
     attack: function() {
-      let max = 10
-      let min = 3
       // random number between 3 and 10 (if random num generated is 1 or 2, use min (which is 3), otherwise use the random num)
-      let damage = Math.max(Math.floor(Math.random() * max) + 1, min)
-      this.monsterHealth -= damage
-
-      if (this.monsterHealth <= 0) {
-        alert('You win!')
-        this.gameIsRunning = false
-        return // to exit out of the fxn and not run code below
+      // let damage = this.calculateDamage(3, 10)
+      this.monsterHealth -= this.calculateDamage(3, 10)
+      if (this.checkWin()) {
+        return
       }
+      // if (this.monsterHealth <= 0) {
+      //   alert('You win!')
+      //   this.gameIsRunning = false
+      //   return // to exit out of the fxn and not run code below
+      // }
 
-      max = 12
-      min = 5
-      damage = Math.max(Math.floor(Math.random() * max) + 1, min)
-      this.playerHealth -= damage
-
+      // damage = this.calculateDamage(5, 12)
+      this.playerHealth -= this.calculateDamage(5, 12)
+      if (this.checkWin()) {
+        return
+      }
       if (this.playerHealth <= 0) {
         alert('You lose!')
         this.gameIsRunning = false
-        return // to exit out of the fxn and not run code below
       }
     },
     specialAttack: function() {},
     heal: function() {},
-    giveUp: function() {}
+    giveUp: function() {},
+    calculateDamage: function(min, max) {
+      Math.max(Math.floor(Math.random() * max) + 1, min)
+    },
+    checkWin: function() {
+      if (this.monsterHealth <= 0) {
+        if (confirm('You won! New Game?')) { // confirm() is built in JS fxn that shows yes/no to user
+          this.startGame()
+        } else {
+          this.gameIsRunning = false
+        }
+        return true // have to return a truthy/falsey value here to check checkWin() condition in attack fxn
+    } else if (this.playerHealth <= 0) {
+        if (confirm('You died! New Game?')) {
+          this.startGame()
+        } else {
+          this.gameIsRunning = false
+        }
+        return true // have to return a truthy/falsey value here to check checkWin() condition in attack fxn
+    }
+    return false // have to return a truthy/falsey value here to check checkWin() condition in attack fxn
   }
 })
